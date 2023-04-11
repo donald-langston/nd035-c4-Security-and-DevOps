@@ -17,6 +17,8 @@ import com.example.demo.model.persistence.repositories.CartRepository;
 import com.example.demo.model.persistence.repositories.OrderRepository;
 import com.example.demo.model.persistence.repositories.UserRepository;
 
+import org.apache.logging.log4j.*;
+
 @RestController
 @RequestMapping("/api/order")
 public class OrderController {
@@ -27,6 +29,8 @@ public class OrderController {
 	
 	@Autowired
 	private OrderRepository orderRepository;
+
+	Logger log = LogManager.getLogger(OrderController.class);
 	
 	
 	@PostMapping("/submit/{username}")
@@ -36,7 +40,13 @@ public class OrderController {
 			return ResponseEntity.notFound().build();
 		}
 		UserOrder order = UserOrder.createFromCart(user.getCart());
-		orderRepository.save(order);
+		try {
+			orderRepository.save(order);
+			log.info("Created order {} successfully", order.getId());
+		} catch (Exception e) {
+			log.error("Error creating order {}", order.getId());
+		}
+
 		return ResponseEntity.ok(order);
 	}
 	

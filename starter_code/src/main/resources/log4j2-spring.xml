@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%style{%d{ISO8601}} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{10}}{bright,yellow}: %msg%n%throwable" />
+        </Console>
+        <SplunkHttp
+                name="splunkhttp"
+                url="http://localhost:8088"
+                token="8d763b23-fad9-4611-b3c9-8a786be4afa1"
+                host="localhost"
+                index="ecommerce_api_dev"
+                type="raw"
+                source="http-event-logs"
+                sourcetype="log4j"
+                messageFormat="text"
+                disableCertificateValidation="true">
+            <PatternLayout pattern="%m" />
+        </SplunkHttp>
+
+    </Appenders>
+
+    <Loggers>
+        <!-- LOG everything at INFO level -->
+        <Root level="info">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="splunkhttp" />
+        </Root>
+    </Loggers>
+</Configuration>
+
+
+        <!--<?xml version="1.0" encoding="UTF-8"?>
+        <configuration>
+            <Appender name="splunkhttp" class="com.splunk.logging.HttpEventCollectorLogbackAppender">
+                <url>http://localhost:8088/services/collector/event</url>
+                <token>8d763b23-fad9-4611-b3c9-8a786be4afa1</token>
+                <index>ecommerce_api_dev</index>
+                <disableCertificateValidation>true</disableCertificateValidation>
+                <layout class="ch.qos.logback.classic.PatternLayout">
+                    <pattern>%msg</pattern>
+                </layout>
+            </Appender>
+            <logger name ="splunkhttp" level="info">
+                <appender-ref ref="splunkhttp" />
+            </logger>
+        </configuration>-->
+
+
